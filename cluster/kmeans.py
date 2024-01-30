@@ -64,6 +64,7 @@ class KMeans:
                 sum_dist += np.linalg.norm(self.centers[i]-old_centers[i])
             diff = sum_dist
             iter += 1
+        self.error = diff
 
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
@@ -82,6 +83,9 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        distances, centroids = self._calc_distances(mat)
+        return centroids
+
 
     def get_error(self) -> float:
         """
@@ -92,6 +96,7 @@ class KMeans:
             float
                 the squared-mean error of the fit model
         """
+        return self.error
 
     def get_centroids(self) -> np.ndarray:
         """
@@ -101,6 +106,8 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        return self.centers
+
     def _calc_distances(self, points):
         distances = []
         centroids = []
