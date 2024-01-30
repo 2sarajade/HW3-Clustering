@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial.distance import cdist
+import random
 
 
 class KMeans:
@@ -20,6 +21,10 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
+        self.k = k
+        self.tol = tol
+        self.max_iter = max_iter
+        self.centers = []
 
     def fit(self, mat: np.ndarray):
         """
@@ -36,6 +41,30 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        # kmeans++ initialization
+        first_center = random.choice(range(self.k))
+        self.centers.append(mat[first_center,])
+        for _ in range(1, self.k):
+            distances, centroids = self._calc_distances(mat)
+            new_centroid_index = random.choices(range(mat.shape[0]), weights = distances, k = 1)
+            self.centers.append(mat[new_centroid_index,])
+
+        # kmeans algorithm
+        iter = 0
+        diff = np.inf
+        while iter < self.max_iter and diff > self.tol:
+            distances, centroids = self._calc_distances(mat)
+            old_centers = self.centers.copy()
+            for i in range(len(self.centers)):
+                ind_points_in_clust = [j for j in range(mat.shape[0]) if centroids[j] == i]
+                points_in_clust = mat[ind_points_in_clust, ]
+                self.centers[i] = np.mean(points_in_clust, axis = 0)
+            sum_dist = 0
+            for i in range(len(self.centers)):
+                sum_dist += np.linalg.norm(self.centers[i]-old_centers[i])
+            diff = sum_dist
+            iter += 1
+
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
@@ -72,3 +101,18 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+    def _calc_distances(self, points):
+        distances = []
+        centroids = []
+        for i in range(np.shape(points)[0]):
+            min_distance = np.inf
+            closest_centroid = 0
+            for j in range(len(self.centers)):
+                center = self.centers[j]
+                distance = np.linalg.norm(center-points[i,])
+                if distance < min_distance:
+                    min_distance = distance
+                    closest_centroid = j
+            distances.append(min_distance)
+            centroids.append(closest_centroid)
+        return distances, centroids
