@@ -24,8 +24,8 @@ def main():
     km = KMeans(k=4)
     km.fit(clusters)
     pred = km.predict(clusters)
-    # scores = Silhouette().score(clusters, pred)
-    # plot_multipanel(clusters, labels, pred, scores)
+    scores = Silhouette().score(clusters, pred)
+    plot_multipanel(clusters, labels, pred, scores)
     
 
 if __name__ == "__main__":
