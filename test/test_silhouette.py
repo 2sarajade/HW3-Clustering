@@ -23,6 +23,7 @@ def test_silhouette():
     pred = km.predict(clusters)
     scores = Silhouette().score(clusters, pred)
 
-    real_scores = silhouette_score(clusters, pred, metric='euclidean')
+    real_score = silhouette_score(clusters, pred, metric='euclidean')
 
-    assert np.mean(scores) == real_scores
+    score_diff = abs(np.mean(scores) - real_score)
+    assert score_diff < .00000000001
