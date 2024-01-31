@@ -24,7 +24,7 @@ class KMeans:
         #error handling
         if type(k) is not int or k < 1:
             raise ValueError("invalid input for k")
-        if max_iter < 1:
+        if max_iter < 0:
             raise ValueError("invalid input for max_iter")
         if tol < 0:
             raise ValueError("invalid input for tol")
