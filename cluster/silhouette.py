@@ -24,19 +24,30 @@ class Silhouette:
             np.ndarray
                 a 1D array with the silhouette scores for each of the observations in `X`
         """
+        # error handling
+        if X.shape[0] != len(y):
+            raise ValueError("Dimensionsn of inputs do not match")
+
+        # calculate scores
         scores = []
         for i in range(len(y)):
             a = self._calculate_a(i, X, y)
             b = self._calculate_b(i, X, y)
             max_ab = max(a, b)
-            scores.append((b-a)/max_ab)
+            if max_ab != 0:
+                scores.append((b-a)/max_ab)
+            else:
+                scores.append(0)
         return scores
 
     def _calculate_a(self, i, X, y):
         i_cluster = y[i]
         i_point = X[i,]
         distances = [np.linalg.norm(i_point-X[point,]) for point in range(len(y)) if point != i and y[point] == i_cluster]
-        return np.mean(distances)
+        if distances:
+            return np.mean(distances)
+        else:
+            return 0.0
     
     def _calculate_b(self, i, X, y):
         i_cluster = y[i]

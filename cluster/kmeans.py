@@ -21,6 +21,15 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
+        #error handling
+        if type(k) is not int or k < 1:
+            raise ValueError("invalid input for k")
+        if max_iter < 1:
+            raise ValueError("invalid input for max_iter")
+        if tol < 0:
+            raise ValueError("invalid input for tol")
+
+        #initialize params
         self.k = k
         self.tol = tol
         self.max_iter = max_iter
@@ -41,6 +50,9 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        #error handling
+        self.point_dims = mat.shape[1]
+
         # kmeans++ initialization
         first_center = random.choice(range(self.k))
         self.centers.append(mat[first_center,])
@@ -83,6 +95,11 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        #error handling
+        if mat.shape[1] != self.point_dims:
+            raise ValueError("points do not have same dimensions as training set")
+        
+        #predict
         distances, centroids = self._calc_distances(mat)
         return centroids
 
