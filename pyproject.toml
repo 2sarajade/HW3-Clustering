@@ -5,21 +5,17 @@ requires = [
 	]
 build-backend = "flit_core.buildapi"
 
-[tool.pytest.ini_options]
-pythonpath = [
-  "."
-]
-
 [project]
 name = "cluster"
-authors = [{name = "Han Chen", email = "han.chen@ucsf.edu"}, {name = "Sara Smith", email = "sara.smith@ucsf.edu"}]
+authors = [{name = "Sara Smith", email = "sara.smith@ucsf.edu"}]
 readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
 dependencies = [
-    "pytest>=3.0"
+    "pytest>=3.0",
+	"numpy",
+	"matplotlib",
+	"scipy",
+    "scikit-learn"
 ]
-
-[project.urls]
-Home = "https://github.com/BMI203-2024/HW2-BFS.git"
