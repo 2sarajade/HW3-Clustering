@@ -44,10 +44,10 @@ class Silhouette:
         i_cluster = y[i]
         i_point = X[i,]
         distances = [np.linalg.norm(i_point-X[point,]) for point in range(len(y)) if point != i and y[point] == i_cluster]
-        if distances:
-            return np.mean(distances)
-        else:
-            return 0.0
+        #if distances:
+        return np.mean(distances)
+       # else:
+        #    return 0.0
     
     def _calculate_b(self, i, X, y):
         i_cluster = y[i]
@@ -57,7 +57,7 @@ class Silhouette:
             if cluster_label != i_cluster:
                 distances = [np.linalg.norm(i_point-X[point]) for point in range(len(y)) if y[point] == cluster_label]
                 b_values.append(np.mean(distances))
-        if b_values:
-            return min(b_values)
-        else:
-            return 0.0
+        #if b_values:
+        return min(b_values)
+        #else:
+        #    return 0.0
